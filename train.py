@@ -20,13 +20,17 @@ from metrics import metric_base
 if 1:
     desc          = 'sgan'                                                                 # Description string included in result subdir name.
     train         = EasyDict(run_func_name='training.training_loop.training_loop')         # Options for training loop.
+    # train         = EasyDict(run_func_name='training.training_loop.training_loop',
+    #                          resume_run_id=0,
+    #                          resume_snapshot=7960,
+    #                          resume_kimg=7960)
     G             = EasyDict(func_name='training.networks_stylegan.G_style')               # Options for generator network.
     D             = EasyDict(func_name='training.networks_stylegan.D_basic')               # Options for discriminator network.
     G_opt         = EasyDict(beta1=0.0, beta2=0.99, epsilon=1e-8)                          # Options for generator optimizer.
     D_opt         = EasyDict(beta1=0.0, beta2=0.99, epsilon=1e-8)                          # Options for discriminator optimizer.
     G_loss        = EasyDict(func_name='training.loss.G_logistic_nonsaturating')           # Options for generator loss.
     D_loss        = EasyDict(func_name='training.loss.D_logistic_simplegp', r1_gamma=10.0) # Options for discriminator loss.
-    dataset       = EasyDict()                                                             # Options for load_dataset().
+    dataset       = EasyDict()                                               kk              # Options for load_dataset().
     sched         = EasyDict()                                                             # Options for TrainingSchedule.
     grid          = EasyDict(size='4k', layout='random')                                   # Options for setup_snapshot_image_grid().
     metrics       = [metric_base.fid50k]                                                   # Options for MetricGroup.
@@ -34,13 +38,14 @@ if 1:
     tf_config     = {'rnd.np_random_seed': 1000}                                           # Options for tflib.init_tf().
 
     # Dataset.
-    desc += '-ffhq';     dataset = EasyDict(tfrecord_dir='ffhq');                 train.mirror_augment = True
+    #desc += '-ffhq';     dataset = EasyDict(tfrecord_dir='ffhq');                 train.mirror_augment = True
     #desc += '-ffhq512';  dataset = EasyDict(tfrecord_dir='ffhq', resolution=512); train.mirror_augment = True
     #desc += '-ffhq256';  dataset = EasyDict(tfrecord_dir='ffhq', resolution=256); train.mirror_augment = True
     #desc += '-celebahq'; dataset = EasyDict(tfrecord_dir='celebahq');             train.mirror_augment = True
     #desc += '-bedroom';  dataset = EasyDict(tfrecord_dir='lsun-bedroom-full');    train.mirror_augment = False
     #desc += '-car';      dataset = EasyDict(tfrecord_dir='lsun-car-512x384');     train.mirror_augment = False
     #desc += '-cat';      dataset = EasyDict(tfrecord_dir='lsun-cat-full');        train.mirror_augment = False
+    desc += '-tadao-ando';      dataset = EasyDict(tfrecord_dir='Tadao_Ando');     train.mirror_augment = True
 
     # Number of GPUs.
     #desc += '-1gpu'; submit_config.num_gpus = 1; sched.minibatch_base = 4; sched.minibatch_dict = {4: 128, 8: 128, 16: 128, 32: 64, 64: 32, 128: 16, 256: 8, 512: 4}
