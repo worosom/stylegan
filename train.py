@@ -36,7 +36,7 @@ def main(dataset_name=None):
     dataset       = EasyDict()                                                             # Options for load_dataset().
     sched         = EasyDict()                                                             # Options for TrainingSchedule.
     grid          = EasyDict(size='4k', layout='random')                                   # Options for setup_snapshot_image_grid().
-    metrics       = [metric_base.fid50k]                                                   # Options for MetricGroup.
+    metrics       = []                                                   # Options for MetricGroup.
     submit_config = dnnlib.SubmitConfig()                                                  # Options for dnnlib.submit_run().
     tf_config     = {'rnd.np_random_seed': 1000}                                           # Options for tflib.init_tf().
 
