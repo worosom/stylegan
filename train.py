@@ -19,14 +19,14 @@ from metrics import metric_base
 # Main entry point for training.
 # Calls the function indicated by 'train' using the selected options.
 
-def main(dataset_name=None):
+def main(dataset_name=None, resume_run_id=None, resume_snapshot=None, resume_kimg=None):
     assert isinstance(dataset_name, str)
     desc          = 'sgan'                                                                 # Description string included in result subdir name.
     train         = EasyDict(run_func_name='training.training_loop.training_loop')         # Options for training loop.
-    # train         = EasyDict(run_func_name='training.training_loop.training_loop',
-    #                          resume_run_id=0,
-    #                          resume_snapshot=7960,
-    #                          resume_kimg=7960)
+    train         = EasyDict(run_func_name='training.training_loop.training_loop',
+                             resume_run_id=resume_run_id,
+                             resume_snapshot=resume_snapshot,
+                             resume_kimg=resume_kimg)
     G             = EasyDict(func_name='training.networks_stylegan.G_style')               # Options for generator network.
     D             = EasyDict(func_name='training.networks_stylegan.D_basic')               # Options for discriminator network.
     G_opt         = EasyDict(beta1=0.0, beta2=0.99, epsilon=1e-8)                          # Options for generator optimizer.
@@ -48,7 +48,7 @@ def main(dataset_name=None):
     #desc += '-bedroom';  dataset = EasyDict(tfrecord_dir='lsun-bedroom-full');    train.mirror_augment = False
     #desc += '-car';      dataset = EasyDict(tfrecord_dir='lsun-car-512x384');     train.mirror_augment = False
     #desc += '-cat';      dataset = EasyDict(tfrecord_dir='lsun-cat-full');        train.mirror_augment = False
-    desc += dataset_name.lower().replace('_', '-')
+    desc += '-' + dataset_name.lower().replace('_', '-')
     dataset = EasyDict(tfrecord_dir=dataset_name)
     train.mirror_augment = True
 
@@ -104,6 +104,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--dataset_name', type=str)
+    parser.add_argument('--resume_run_id', type=int)
+    parser.add_argument('--resume_snapshot', type=int)
+    parser.add_argument('--resume_kimg', type=int)
 
     args = parser.parse_args()
     main(**vars(args))
