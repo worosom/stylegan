@@ -19,7 +19,11 @@ from metrics import metric_base
 # Main entry point for training.
 # Calls the function indicated by 'train' using the selected options.
 
-def main(dataset_name=None, resume_run_id=None, resume_snapshot=None, resume_kimg=None):
+def main(dataset_name=None,
+         resume_run_id=None,
+         resume_snapshot=None,
+         resume_kimg=None,
+         style_mixing_prob=.9):
     assert isinstance(dataset_name, str)
     desc          = 'sgan'                                                                 # Description string included in result subdir name.
     train         = EasyDict(run_func_name='training.training_loop.training_loop')         # Options for training loop.
@@ -79,6 +83,7 @@ def main(dataset_name=None, resume_run_id=None, resume_snapshot=None, resume_kim
     #desc += '-mix50'; G.style_mixing_prob = 0.5
     #desc += '-mix90'; G.style_mixing_prob = 0.9 # default
     #desc += '-mix100'; G.style_mixing_prob = 1.0
+    desc += '-mix%d' % int(style_mixing_prob*100); G.style_mixing_prob = style_mixing_prob
 
     # Table 4.
     #desc += '-traditional-0'; G.use_styles = False; G.use_pixel_norm = True; G.use_instance_norm = False; G.mapping_layers = 0; G.truncation_psi = None; G.const_input_layer = False; G.style_mixing_prob = 0.0; G.use_noise = False
@@ -107,6 +112,7 @@ if __name__ == "__main__":
     parser.add_argument('--resume_run_id', type=int)
     parser.add_argument('--resume_snapshot', type=int)
     parser.add_argument('--resume_kimg', type=int)
+    parser.add_argument('--style_mixing_prob', type=float, default=.9)
 
     args = parser.parse_args()
     main(**vars(args))
